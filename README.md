@@ -1,8 +1,14 @@
 # Fitness EDA, Dashboard & ML Project
 
+[🇧🇷 Português](#-português) | [🇺🇸 English](#-english)
+
+---
+
+## 🇧🇷 Português
+
 Este projeto é uma solução completa em Python para análise e modelagem de dados de atividades físicas, integrando informações extraídas do **Strava** e do **Apple Health**.
 
-## 🚀 Funcionalidades
+### 🚀 Funcionalidades
 
 O projeto é dividido em diferentes módulos dentro da pasta `src/`:
 
@@ -22,7 +28,7 @@ O projeto é dividido em diferentes módulos dentro da pasta `src/`:
 - **📈 Dashboard (`src/dashboard/`)**:
   - Módulo reservado para a interface visual interativa para visualização dos resultados da EDA e do Machine Learning.
 
-## 📂 Estrutura de Diretórios
+### 📂 Estrutura de Diretórios
 
 ```text
 fitness_eda_dash_ml/
@@ -36,7 +42,7 @@ fitness_eda_dash_ml/
 └── README.md              # Documentação principal
 ```
 
-## 🛠️ Como Executar
+### 🛠️ Como Executar
 
 O processamento inicial dos dados começa pelo pipeline. Se você tiver os arquivos ZIP exportados das suas contas:
 
@@ -47,7 +53,7 @@ python src/pipeline/run_pipeline.py caminho/para/strava.zip caminho/para/apple_h
 
 Em seguida, explore os scripts nas pastas de `eda` e `ml` para geração de insights e modelos.
 
-## 📋 Requisitos e Tecnologias
+### 📋 Requisitos e Tecnologias
 
 - Python 3.8+
 - Pandas, NumPy
@@ -57,4 +63,63 @@ Em seguida, explore os scripts nas pastas de `eda` e `ml` para geração de insi
 
 ---
 
-Desenvolvido para acompanhamento contínuo e análise profunda de métricas de condicionamento físico.
+## 🇺🇸 English
+
+This project is a comprehensive Python solution for analyzing and modeling physical activity data, integrating information extracted from **Strava** and **Apple Health**.
+
+### 🚀 Features
+
+The project is divided into different modules within the `src/` folder:
+
+- **🧩 Data Pipeline (`src/pipeline/`)**: 
+  - Scripts for processing and extracting raw data from Strava (exported ZIP files).
+  - Scripts for processing the XML exported from Apple Health (steps, calories, heart rate, etc.).
+  - Merging and structuring the data for daily analyses and advanced feature creation.
+  
+- **📊 Exploratory Data Analysis & Statistics (`src/eda/`)**:
+  - Detailed exploratory data analysis (EDA) of the activities.
+  - Statistical tests to understand correlations and performance patterns (such as pace evolution, impact of training volume, etc.).
+
+- **🤖 Machine Learning (`src/ml/`)**:
+  - Predictive models trained with historical workout data.
+  - Performance predictions, effort categorization, or other target metrics defined in the extracted features.
+
+- **📈 Dashboard (`src/dashboard/`)**:
+  - Module reserved for the interactive visual interface to track the results of the EDA and Machine Learning models.
+
+### 📂 Directory Structure
+
+```text
+fitness_eda_dash_ml/
+├── data/                  # Raw and processed data, features (not versioned in Git)
+├── src/
+│   ├── pipeline/          # ETL Scripts (Strava and Apple Health)
+│   ├── eda/               # Exploratory and Statistical Analysis scripts
+│   ├── ml/                # Machine Learning pipeline
+│   └── dashboard/         # Interactive Dashboard application code
+├── fitness_project_final/ # Final artifacts and consolidated project files
+└── README.md              # Main documentation
+```
+
+### 🛠️ How to Run
+
+The initial data processing starts with the pipeline. If you have the exported ZIP files from your accounts:
+
+```bash
+python src/pipeline/run_pipeline.py path/to/strava.zip path/to/apple_health.zip
+```
+*(The Apple Health ZIP is optional if you only want to process Strava data).*
+
+Afterward, explore the scripts in the `eda` and `ml` folders to generate insights and models.
+
+### 📋 Requirements and Technologies
+
+- Python 3.8+
+- Pandas, NumPy
+- Scikit-Learn
+- Matplotlib, Seaborn, Plotly (for data visualization)
+- (Other specific libraries may be defined in individual scripts)
+
+---
+
+Developed for continuous tracking and deep analysis of fitness conditioning metrics.
