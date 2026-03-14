@@ -13,53 +13,67 @@ Este projeto é uma solução completa em Python para análise e modelagem de da
 O projeto é dividido em diferentes módulos dentro da pasta `src/`:
 
 - **🧩 Pipeline de Dados (`src/pipeline/`)**: 
-  - Scripts para processamento e extração de dados brutos do Strava (arquivos ZIP exportados).
-  - Scripts para processamento do XML exportado do Apple Health (passos, calorias, batimentos cardíacos, etc.).
-  - Mescla e estruturação dos dados para análises diárias e criação de features avançadas.
+  - Scripts de ETL para extrair dados brutos (ZIPs exportados) do **Strava** (corridas, elevação, tempo, pace, FC) e do **Apple Health** (HRV, VO2Max, passos, calorias).
+  - Limpeza e mesclagem automatizada dos dados, gerando features avançadas e agregadas dia a dia.
   
 - **📊 Análise Exploratória e Estatística (`src/eda/`)**:
-  - Análise exploratória de dados (EDA) detalhada das atividades.
-  - Testes estatísticos para entender correlações e padrões de desempenho (como evolução de pace, impacto do volume de treino, etc.).
+  - Geração de gráficos complexos como Mapas de Calor (estilo contribuições do GitHub), evolução do Pace, carga de treino semanal e correlações.
+  - Testes estatísticos estruturados. As visualizações são salvas automaticamente na pasta `outputs/plots/`.
 
 - **🤖 Machine Learning (`src/ml/`)**:
-  - Modelos preditivos treinados com os dados históricos de treino.
-  - Previsões de desempenho, categorização de esforço ou outras métricas alvo definidas nas features extraídas.
-
+  - **Modelo de Regressão**: Treinamento de diversos algoritmos (Ridge, Random Forest, Gradient Boosting) para **prever o Pace** com base em características dos treinos (distância, elevação, heart rate, carga das últimas semanas, etc).
+  - **Modelo de Classificação**: Pipeline com Random Forest focado em classificar a **Intensidade do Treino** (Leve, Moderado, Intenso) usando o *suffer_score* e métricas de esforço.
+  
 - **📈 Dashboard (`src/dashboard/`)**:
-  - Módulo reservado para a interface visual interativa para visualização dos resultados da EDA e do Machine Learning.
+  - Módulo reservado para a interface visual interativa de visualização de resultados de Machine Learning e EDA.
 
 ### 📂 Estrutura de Diretórios
 
 ```text
 fitness_eda_dash_ml/
-├── data/                  # Dados brutos, processados e features (não versionados no Git)
+├── data/                  # Dados brutos das fontes, intermediários e features geradas
+├── outputs/
+│   ├── plots/             # Gráficos da EDA e avaliação dos modelos ML salvos automaticamente
+│   └── reports/           # Relatórios gerados pelos modelos
 ├── src/
-│   ├── pipeline/          # Scripts ETL (Strava e Apple Health)
-│   ├── eda/               # Scripts de Análise Exploratória e Estatística
-│   ├── ml/                # Pipeline de Machine Learning
-│   └── dashboard/         # Código da aplicação do Dashboard interativo
-├── fitness_project_final/ # Artefatos finais e consolidado do projeto
-└── README.md              # Documentação principal
+│   ├── pipeline/          # Processamento de Dados ETL (01_strava, 02_apple_health)
+│   ├── eda/               # Scripts de Análise Exploratória
+│   ├── ml/                # Pipeline preditivo (Regressão e Classificação)
+│   └── dashboard/         # Código da aplicação Dash
+└── README.md              # Este documento
 ```
+
+> **⚠️ Aviso sobre os Dados**: A pasta `data/` encontra-se ignorada no controle de versão (`.gitignore`) para proteger a privacidade dos seus treinos. Para executar o projeto localmente de maneira completa, você deve exportar os seus ZIPs do Strava e do Apple Health.
 
 ### 🛠️ Como Executar
 
-O processamento inicial dos dados começa pelo pipeline. Se você tiver os arquivos ZIP exportados das suas contas:
-
+**1. Processamento Inicial dos Dados (Pipeline ETL):**
+O fluxo inicia extraindo tudo a partir dos seus zips exportados de suas contas.
 ```bash
 python src/pipeline/run_pipeline.py caminho/para/strava.zip caminho/para/apple_health.zip
 ```
-*(O Apple Health ZIP é opcional, caso queira processar apenas dados do Strava).*
+*(O Apple Health ZIP é opcional caso queira rodar apenas as informações fornecidas pelo Strava).*
 
-Em seguida, explore os scripts nas pastas de `eda` e `ml` para geração de insights e modelos.
+**2. Geração da Análise Exploratória (EDA):**
+Execute este script para processar a base combinada e plotar visões detalhadas das suas atividades.
+```bash
+python src/eda/04_eda.py
+```
+*Os gráficos (visão geral, correlações, heatmap anual, carga de treino) ficarão salvos na pasta `outputs/plots/`.*
 
-### 📋 Requisitos e Tecnologias
+**3. Treinamento dos Modelos Predicionais (ML):**
+Execute a pipeline de ML para treinar a regressão (previsão de pace) e a classificação de intensidade.
+```bash
+python src/ml/06_machine_learning.py
+```
+*Gera relatórios de acurácia, R², MAE e plota resultados de predições VS real e Matriz de Confusão no diretório de `outputs/plots/`.*
+
+### 📋 Requisitos
 
 - Python 3.8+
 - Pandas, NumPy
 - Scikit-Learn
-- Matplotlib, Seaborn, Plotly (para visualização de dados)
-- (Demais bibliotecas específicas podem estar definidas nos scripts individuais)
+- Matplotlib, Seaborn, Plotly
 
 ---
 
@@ -72,54 +86,64 @@ This project is a comprehensive Python solution for analyzing and modeling physi
 The project is divided into different modules within the `src/` folder:
 
 - **🧩 Data Pipeline (`src/pipeline/`)**: 
-  - Scripts for processing and extracting raw data from Strava (exported ZIP files).
-  - Scripts for processing the XML exported from Apple Health (steps, calories, heart rate, etc.).
-  - Merging and structuring the data for daily analyses and advanced feature creation.
+  - ETL scripts processing raw data (exported ZIPs) from **Strava** (runs, elevation, time, pace, HR) and **Apple Health** (HRV, VO2Max, steps, calories).
+  - Automated cleaning, merging and structuring the data for daily analyses running advanced feature engineering.
   
 - **📊 Exploratory Data Analysis & Statistics (`src/eda/`)**:
-  - Detailed exploratory data analysis (EDA) of the activities.
-  - Statistical tests to understand correlations and performance patterns (such as pace evolution, impact of training volume, etc.).
+  - Plotting rich visualizations such as GitHub-style Activity Heatmaps, Pace evolution trends, weekly load bars, and variable correlations.
+  - Automatically exports all generated plot images into the `outputs/plots/` folder.
 
 - **🤖 Machine Learning (`src/ml/`)**:
-  - Predictive models trained with historical workout data.
-  - Performance predictions, effort categorization, or other target metrics defined in the extracted features.
-
+  - **Regression Model**: Trains several algorithms (Ridge, Random Forest, Gradient Boosting) to **predict Pace** based on workouts details (distance, elevation, heart rate, historical training load, etc).
+  - **Classification Model**: Uses Random Forest Pipeline focusing on categorizing **Workout Intensity** (Light, Moderate, Intense) according to *suffer_score* and exertion metrics.
+  
 - **📈 Dashboard (`src/dashboard/`)**:
-  - Module reserved for the interactive visual interface to track the results of the EDA and Machine Learning models.
+  - Module reserved for the interactive visual interface tracking the results of the EDA and ML models.
 
 ### 📂 Directory Structure
 
 ```text
 fitness_eda_dash_ml/
-├── data/                  # Raw and processed data, features (not versioned in Git)
+├── data/                  # Raw source data, processed datasets, and model features
+├── outputs/
+│   ├── plots/             # Charts generated from EDA & ML automatically saved here
+│   └── reports/           # Generated metrics and text reports
 ├── src/
-│   ├── pipeline/          # ETL Scripts (Strava and Apple Health)
-│   ├── eda/               # Exploratory and Statistical Analysis scripts
-│   ├── ml/                # Machine Learning pipeline
-│   └── dashboard/         # Interactive Dashboard application code
-├── fitness_project_final/ # Final artifacts and consolidated project files
-└── README.md              # Main documentation
+│   ├── pipeline/          # Complete ETL Data Pipeline
+│   ├── eda/               # Scripts for Exploratory analysis plotting
+│   ├── ml/                # AI and ML components (Pace Predictor and Clustering)
+│   └── dashboard/         # Interactive App
+└── README.md              # This document
 ```
+
+> **⚠️ Data Privacy Notice**: The `data/` folder is intentionally excluded via `.gitignore` to preserve your privacy regarding workouts. To execute the application locally, you must provide your own valid exports of Strava and Apple Health. 
 
 ### 🛠️ How to Run
 
-The initial data processing starts with the pipeline. If you have the exported ZIP files from your accounts:
-
+**1. Initial ETL Processing Pipeline:**
+Run the initial script providing your exported ZIPs.
 ```bash
 python src/pipeline/run_pipeline.py path/to/strava.zip path/to/apple_health.zip
 ```
-*(The Apple Health ZIP is optional if you only want to process Strava data).*
+*(Passing the Apple Health ZIP is optional; it defaults to running Strava logic solo).*
 
-Afterward, explore the scripts in the `eda` and `ml` folders to generate insights and models.
+**2. Executing EDA (Charts Generation):**
+Run this script to plot insights from your generated combined dataset.
+```bash
+python src/eda/04_eda.py
+```
+*Graphs (overview, heatmap, load evolution, correlations) will be generated inside the `outputs/plots/` tree.*
 
-### 📋 Requirements and Technologies
+**3. Train Predictive Models (ML):**
+Execute learning scripts to fit random forests and ridge models for Pace predictions and Intensity classifications.
+```bash
+python src/ml/06_machine_learning.py
+```
+*Will output evaluation metrics (R², MAE, Accuracy) and generate confusion matrices + True/Pred relation plots to `outputs/plots/`.*
+
+### 📋 Requirements
 
 - Python 3.8+
 - Pandas, NumPy
 - Scikit-Learn
-- Matplotlib, Seaborn, Plotly (for data visualization)
-- (Other specific libraries may be defined in individual scripts)
-
----
-
-Developed for continuous tracking and deep analysis of fitness conditioning metrics.
+- Matplotlib, Seaborn, Plotly
